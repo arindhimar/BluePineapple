@@ -13,6 +13,6 @@ h=[]
 
 for i in list_of_numbers:
     insert_number(i)
-    
+
 
 print(h)

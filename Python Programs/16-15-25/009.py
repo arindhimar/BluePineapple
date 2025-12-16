@@ -1,5 +1,5 @@
-# s="thisisasamplestring"
-s="abab"
+
+s=input("Enter string   ")
 tempStr=s*2
 
 
