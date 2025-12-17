@@ -1,0 +1,6 @@
+a=float(input())
+b=float(input())
+c=float(input())
+h=float(input())
+V=0.25*h*(a**4+2*(a*b)**2+2*(a*c)**2-b**4+2*(b*c)**2-c**4)
+print(V)
