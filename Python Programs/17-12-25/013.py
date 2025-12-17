@@ -13,4 +13,6 @@ for word in splitWord:
     
 rev_count={key:value for key, value in sorted(wordCount.items(), key=lambda item: item[1], reverse=True)}
 
-print(list(rev_count.keys())[0])
+# print(list(rev_count.keys())[0])
+
+print(rev_count)

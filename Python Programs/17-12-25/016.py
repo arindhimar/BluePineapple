@@ -8,4 +8,5 @@ def find_under_score_lower(st):
     print(res)
     
 
-find_under_score_lower("abc_def XYZ x_y test_case A_b c_d_e")
+# find_under_score_lower("abc_def XYZ x_y test_case A_b c_d_e ")
+find_under_score_lower("valid: abc_def, x_y; invalid: Abc_def, abc__def, hello-World")
