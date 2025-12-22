@@ -10,5 +10,5 @@ def substrings_same_start_end(word):
     
     return substrs
 
-word="aba"
+word="abaababa"
 print(substrings_same_start_end(word))
