@@ -26,6 +26,14 @@ function findLargestNumber(arr) {
     return largest;
 }
 
+function findAverage(arr) {
+    if (arr.length==0) {
+        console.log("Array is empty");
+        return null;
+    }
+    reducdedSum=arr.reduce((accumulator,currentValue)=>accumulator+currentValue,0);
+    return reducdedSum/arr.length;
+}   
 
 let arrayLength=10;
 let minValue=1;
@@ -36,3 +44,4 @@ let randomArray=createRandomArray(arrayLength, minValue, maxValue);
 console.log(randomArray);
 
 console.log("Largest number in the array:",findLargestNumber(randomArray));
+console.log("Average of the array:",findAverage(randomArray));
