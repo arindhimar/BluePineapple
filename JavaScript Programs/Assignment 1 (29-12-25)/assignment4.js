@@ -13,9 +13,9 @@ function createRandomArray(length, min, max) {
 
 
 function findLargestNumber(arr) {
-    if (arr.length === 0) {
-        console.log("Array is empty");
-        return null;
+    if (arr.length==0) {
+        console.log("Array is empty")
+        return null
     }
     let largest=arr[0];
     for (let i=1;i<arr.length;i++) {
@@ -24,6 +24,15 @@ function findLargestNumber(arr) {
         }
     }
     return largest;
+}
+
+function findSmallestNumber(arr){
+    if (arr.length==0){
+        console.log("Array is empty!!")
+        return null;
+    }
+
+    return Math.min(...arr)
 }
 
 function findAverage(arr) {
@@ -44,4 +53,6 @@ let randomArray=createRandomArray(arrayLength, minValue, maxValue);
 console.log(randomArray);
 
 console.log("Largest number in the array:",findLargestNumber(randomArray));
+console.log("Smallest number in the array:",findSmallestNumber(randomArray));
+
 console.log("Average of the array:",findAverage(randomArray));
