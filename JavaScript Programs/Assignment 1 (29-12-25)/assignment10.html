@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function changeImage(){
+            let imageTag = document.getElementById("myImage");
+            if(imageTag.src.includes("cameraegg.org")){
+                imageTag.src = "https://thumbs.dreamstime.com/b/sample-jpeg-fluffy-white-pomeranian-puppy-sits-looks-camera-colorful-balls-front-364720569.jpg";
+            }
+            else{
+                imageTag.src = "https://www.cameraegg.org/wp-content/uploads/2015/06/canon-powershot-g3-x-sample-images-1.jpg";
+            }
+            let buttonTag = document.getElementById("changeImageButton");
+            buttonTag.innerText = "Image Changed";
+        }
+    </script>
+</head>
+<body>
+    <img id="myImage" width="400px" height="400px" src="https://www.cameraegg.org/wp-content/uploads/2015/06/canon-powershot-g3-x-sample-images-1.jpg" alt="Sample Image">
+    <br>
+    <button id="changeImageButton" onclick="changeImage()">Change Image</button>
+</html>
