@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Blog Layout</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+}
+
+header, footer{
+    background:#333;
+    color:#fff;
+    padding:15px;
+    text-align:center;
+}
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 120px);
+}
+
+aside{
+    width:25%;
+    background:#f4f4f4;
+    padding:15px;
+}
+
+main{
+    width:75%;
+    padding:15px;
+}
+
+article{
+    margin-bottom:20px;
+}
+
+@media (max-width:768px){
+    .layout{
+        flex-direction:column;
+    }
+
+    aside,
+    main{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>My Blog</h1>
+</header>
+
+<div class="layout">
+    <aside>
+        <h3>Sidebar</h3>
+        <p>Links and categories</p>
+    </aside>
+
+    <main>
+        <article>
+            <h2>Blog Post Title</h2>
+            <p>This is a simple blog post layout using semantic HTML and Flexbox.</p>
+        </article>
+
+        <article>
+            <h2>Another Post</h2>
+            <p>On smaller screens, the sidebar moves below the header.</p>
+        </article>
+    </main>
+</div>
+
+<footer>
+    <p>© 2026 My Blog</p>
+</footer>
+
+</body>
+</html>
