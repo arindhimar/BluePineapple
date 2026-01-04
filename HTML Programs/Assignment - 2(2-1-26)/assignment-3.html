@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assignment3.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Employee Directory</h2>
+        <div class="table-wrapper">
+            <table class="employee-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Email</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>Arin Dhimar</td>
+                        <td>Marketing</td>
+                        <td><a href="mailto:arin@gmail.com">arin@gmail.com</a></td>
+                        <td>2023-02-14</td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>Ashish Dhimar</td>
+                        <td>Engineering</td>
+                        <td><a href="mailto:ashish@gmail.com">ashish@gmail.com</a></td>
+                        <td>2021-08-03</td>
+                    </tr>
+                    <tr>
+                        <td>003</td>
+                        <td>ALVF</td>
+                        <td>Design</td>
+                        <td><a href="mailto:alvf@gmail.com">alvf@gmail.com</a></td>
+                        <td>2022-11-21</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Register New Employee</h2>
+        <form class="registration-form" action="#" method="post" novalidate>
+            <div class="form-row">
+                <label class="form-label" for="emp-name">Full name</label>
+                <input class="form-input" id="emp-name" name="name" type="text" placeholder="Jane Doe" required>
+            </div>
+            <div class="form-row">
+                <label class="form-label" for="emp-email">Email</label>
+                <input class="form-input" id="emp-email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-row">
+                <label class="form-label" for="emp-dept">Department</label>
+                <select class="form-select" id="emp-dept" name="department">
+                    <option>Engineering</option>
+                    <option>Design</option>
+                    <option>Marketing</option>
+                    <option>HR</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label class="form-label" for="emp-position">Position</label>
+                <input class="form-input" id="emp-position" name="position" type="text" placeholder="Senior Developer">
+            </div>
+            <div class="form-row">
+                <label class="form-label" for="emp-pass">Password</label>
+                <input class="form-input" id="emp-pass" name="password" type="password" placeholder="Choose a password" required>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="form-button">Register</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
