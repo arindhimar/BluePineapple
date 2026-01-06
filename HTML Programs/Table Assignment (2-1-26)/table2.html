@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Table Exercise</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            background-color: #f2f2f2;
+        }
+        .time-slot {
+            background-color: #ffcc00;
+        }
+        .schedule {
+            background-color: #e6e6fa;
+        }
+        .topic {
+            background-color: #e0f7fa;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML Table Exercise</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Schedule</th>
+                <th>Seminar</th>
+                <th>Topic</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Monday</td>
+                <td class="time-slot">8:00 am</td>
+                <td class="schedule">5:00 pm</td>
+                <td class="topic">Introduction to XML</td>
+            </tr>
+            <tr>
+                <td>Monday</td>
+                <td class="time-slot">8:00 am</td>
+                <td class="schedule">11:00 am</td>
+                <td class="topic">Validity: DTD and Relax NG</td>
+            </tr>
+            <tr>
+                <td>Tuesday</td>
+                <td class="time-slot">11:00 am</td>
+                <td class="schedule">2:00 pm</td>
+                <td class="topic">Xpath</td>
+            </tr>
+            <tr>
+                <td>Wednesday</td>
+                <td class="time-slot">8:00 am</td>
+                <td class="schedule">12:00 pm</td>
+                <td class="topic">XSL Formatting Objects</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
