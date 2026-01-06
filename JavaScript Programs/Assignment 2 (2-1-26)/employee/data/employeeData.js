@@ -1,24 +1,48 @@
 const fs = require('fs');
 const path = require('path');
-const Employee = require('../model/employeeModel');
 
-const CSV_PATH = path.join(__dirname, '..', 'api', 'employees.csv');
+const CSV_PATH = path.join(__dirname, '../api/employees.csv');
 
 function ensureFile() {
-  if (!fs.existsSync(CSV_PATH)) fs.writeFileSync(CSV_PATH, '');
+  const dir = path.dirname(CSV_PATH);
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  if (!fs.existsSync(CSV_PATH)) {
+    fs.writeFileSync(CSV_PATH, '', 'utf8');
+  }
 }
 
 function readAllSync() {
   ensureFile();
-  const raw = fs.readFileSync(CSV_PATH, 'utf8').trim();
-  if (!raw) return [];
-  const lines = raw.split(/\r?\n/).filter(Boolean);
-  return lines.map((l) => Employee.fromCSVLine(l));
+
+  const data = fs.readFileSync(CSV_PATH, 'utf8');
+  if (!data.trim()) return [];
+
+  return data
+    .trim()
+    .split('\n')
+    .map(line => {
+      const [id, name, email, gender] = line.split(',');
+      return {
+        id: String(id),
+        name: name || '',
+        email: email || '',
+        gender: gender || ''
+      };
+    });
 }
 
 function writeAllSync(employees) {
-  const data = employees.map((e) => e.toCSVLine()).join('\n') + '\n';
-  fs.writeFileSync(CSV_PATH, data, 'utf8');
+  ensureFile();
+
+  const data = employees
+    .map(e => `${e.id},${e.name},${e.email},${e.gender}`)
+    .join('\n');
+
+  fs.writeFileSync(CSV_PATH, data + '\n', 'utf8');
 }
 
 function getAll() {
@@ -26,39 +50,42 @@ function getAll() {
 }
 
 function getById(id) {
-  const all = readAllSync();
-  return all.find((e) => e.id === String(id)) || null;
+  return readAllSync().find(e => e.id === String(id)) || null;
 }
 
-function add(employeePayload) {
-  const { valid, errors } = Employee.validate(employeePayload);
-  if (!valid) return { error: errors };
-  const emp = new Employee(employeePayload);
-  const existing = getById(emp.id);
-  if (existing) return { error: ['id already exists'] };
+function add(data) {
   const all = readAllSync();
+
+  const emp = {
+    id: String(data.id),
+    name: data.name || '',
+    email: data.email || '',
+    gender: data.gender || ''
+  };
+
   all.push(emp);
   writeAllSync(all);
   return emp;
 }
 
-function update(id, payload) {
+function update(id, data) {
   const all = readAllSync();
-  const idx = all.findIndex((e) => e.id === String(id));
-  if (idx === -1) return { error: ['not found'] };
-  const updated = Object.assign({}, all[idx], payload);
-  const { valid, errors } = Employee.validate(updated);
-  if (!valid) return { error: errors };
-  all[idx] = new Employee(updated);
+  const index = all.findIndex(e => e.id === String(id));
+
+  if (index === -1) return null;
+
+  all[index] = { ...all[index], ...data, id: String(id) };
   writeAllSync(all);
-  return all[idx];
+  return all[index];
 }
 
 function remove(id) {
   const all = readAllSync();
-  const idx = all.findIndex((e) => e.id === String(id));
-  if (idx === -1) return { error: ['not found'] };
-  const removed = all.splice(idx, 1)[0];
+  const index = all.findIndex(e => e.id === String(id));
+
+  if (index === -1) return null;
+
+  const removed = all.splice(index, 1)[0];
   writeAllSync(all);
   return removed;
 }

@@ -1,42 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Employee Manager</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <bdo dir="rtl"> this shit is crazy </bdo>
-    
-    <cite>
-      <p>Arin Dhimar</p>
-    </cite>
-    <blockquote cite="http://www.worldwildlife.org/who/index.html">
-      For 60 years, WWF has worked to help people and nature thrive. As the
-      world's leading conservation organization, WWF works in nearly 100
-      countries. At every level, we collaborate with people around the world to
-      develop and deliver innovative solutions that protect communities,
-      wildlife, and the places in which they live.
-    </blockquote>
+    <div class="container py-4">
+      <h1 class="mb-4">Employee Manager</h1>
 
-    <p><abbr title="World Wide Web Consortium">W3C</abbr></p>
+      <div id="msg"></div>
 
+      <div class="row">
+        <div class="col-md-5">
+          <form id="empForm">
+            <div class="mb-3">
+              <label class="form-label">ID</label>
+              <input id="id" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input id="name" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input id="email" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Gender</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" value="Male">
+                <label class="form-check-label">Male</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" value="Female">
+                <label class="form-check-label">Female</label>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button id="clearBtn" type="button" class="btn btn-secondary ms-2">
+              Clear
+            </button>
+          </form>
+        </div>
 
-    <h3>List Tags</h3>
-    <ol>
-      <li>First item</li>
-      <li>Second item</li>
-    </ol>
+        <div class="col-md-7">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="list"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-    <ul>
-      <li>First item</li>
-      <li>Second item</li>
-    </ul>
+    <script>
+      const base = "http://localhost:3000/api/employees";
+      let editingId = null;
 
-    <dl>
-      <dt>First item</dt>
-      <dd>First definition</dd>
-      
-    </dl>
+      async function fetchEmployees() {
+        const res = await fetch(base);
+        const data = await res.json();
+        const tbody = document.getElementById("list");
+        tbody.innerHTML = "";
+        data.forEach(emp => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${emp.id}</td>
+            <td>${emp.name}</td>
+            <td>${emp.email}</td>
+            <td>${emp.gender}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="edit('${emp.id}')">Edit</button>
+              <button class="btn btn-sm btn-outline-danger ms-1" onclick="del('${emp.id}')">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function setMsg(msg, type = "success") {
+        const el = document.getElementById("msg");
+        el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+        setTimeout(() => el.innerHTML = "", 2000);
+      }
+
+      document.getElementById("empForm").addEventListener("submit", async ev => {
+        ev.preventDefault();
+
+        const emp = {
+          id: document.getElementById("id").value.trim(),
+          name: document.getElementById("name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          gender: document.querySelector('input[name="gender"]:checked')?.value || ""
+        };
+
+        if (editingId) {
+          await fetch(`${base}/${editingId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(emp)
+          });
+          setMsg("Updated");
+        } else {
+          await fetch(base, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(emp)
+          });
+          setMsg("Added");
+        }
+
+        editingId = null;
+        document.getElementById("empForm").reset();
+        const radios = document.getElementsByName("gender");
+        radios.forEach(r => r.checked = false);
+        fetchEmployees();
+      });
+
+      window.edit = async id => {
+        const res = await fetch(`${base}/${id}`);
+        const emp = await res.json();
+
+        document.getElementById("id").value = emp.id;
+        document.getElementById("name").value = emp.name;
+        document.getElementById("email").value = emp.email;
+
+        const radios = document.getElementsByName("gender");
+        radios.forEach(r => r.checked = r.value === emp.gender);
+
+        editingId = id;
+      };
+
+      window.del = async id => {
+        if (!confirm("Delete " + id + "?")) return;
+        await fetch(`${base}/${id}`, { method: "DELETE" });
+        setMsg("Deleted", "danger");
+        fetchEmployees();
+      };
+
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        editingId = null;
+        document.getElementById("empForm").reset();
+        const radios = document.getElementsByName("gender");
+        radios.forEach(r => r.checked = false);
+      });
+
+      fetchEmployees();
+    </script>
   </body>
 </html>
