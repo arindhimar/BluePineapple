@@ -1,0 +1,10 @@
+==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+==> Starting service...
+Server is running on http://localhost:10000
+==> Your service is live 🎉
+==> 
+==> ///////////////////////////////////////////////////////////
+==> 
+==> Available at your primary URL https://employee-oim4.onrender.com
+==> 
+==> ///////////////////////////////////////////////////////////
