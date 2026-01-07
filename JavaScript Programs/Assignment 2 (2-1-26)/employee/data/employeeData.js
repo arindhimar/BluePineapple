@@ -1,3 +1,4 @@
+const { json } = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 
@@ -55,9 +56,13 @@ function getById(id) {
 
 function add(data) {
   const all = readAllSync();
-
+  // console.log("data received in add function:", JSON.stringify(data));
+  //data is in json format
+  // let tempNewData = JSON.parse(data);
+  console.log("data in add function:", data);
+  
   const emp = {
-    id: String(data.id),
+    id: data.id || String(Date.now())  ,
     name: data.name || '',
     email: data.email || '',
     gender: data.gender || ''
