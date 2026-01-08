@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "q1": "nodemon ./assignment-1/server.js",
+    "q2": "nodemon ./assignment-2/server2.js",
+    "q3": "nodemon ./assignment-3/server3.js"
+
   },
   "keywords": [],
   "author": "",

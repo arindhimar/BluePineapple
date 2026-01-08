@@ -1,0 +1,6 @@
+This a sample log file <- also this is predefined content
+This is text which is added every time this script runs!!
+This is text which is added every time this script runs!!
+This is text which is added every time this script runs!!
+This is text which is added every time this script runs!!
+This is text which is added every time this script runs!!
