@@ -1,0 +1,11 @@
+docker build -t arindhimar/employee .
+
+
+
+docker run -p 3000:3000 arindhimar/employee
+
+
+docker push arindhimar/employee:latest
+
+
+Render URI - https://employee-oim4.onrender.com/

@@ -7,7 +7,6 @@ class Employee {
   }
 
   static fromCSVLine(line) {
-    // naive split since CSV is simple (no quoted commas)
     const parts = line.trim().split(',');
     return new Employee({ id: parts[0], name: parts[1], email: parts[2], gender: parts[3] });
   }
