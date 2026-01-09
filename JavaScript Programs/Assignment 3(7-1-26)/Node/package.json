@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "q1": "nodemon ./assignment-1/server.js",
     "q2": "nodemon ./assignment-2/server2.js",
-    "q3": "nodemon ./assignment-3/server3.js"
+    "q3": "nodemon ./assignment-3/server3.js",
+    "q4": "nodemon ./assignment-4/server4.js",
+    "q5": "nodemon ./assignment-5/server5.js"
 
   },
   "keywords": [],
@@ -14,6 +16,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "express": "^5.2.1",
     "nodemon": "^3.1.11"
   }
 }
