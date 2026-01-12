@@ -1,0 +1,9 @@
+def pell_number(n):
+    if n==0:
+        return 0
+    elif n==1:
+        return 1
+    else:
+        return 2*pell_number(n-1)+pell_number(n-2)
+
+print(pell_number(10))
