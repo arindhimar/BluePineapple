@@ -90,26 +90,28 @@
       const genderInputs = document.getElementsByName("gender");
 
       async function fetchEmployees() {
-        fetch(baseURl)
-          .then((response) => response.json())
-          .then((data) => {
-            for (let tempEmp of data) {
-              const tr = document.createElement("tr");
+        try {
+          const data = await fetch(baseURl);
+          const employees = await data.json();
 
-              tr.innerHTML = `
-                            <td>${tempEmp.id}</td>
-                            <td>${tempEmp.name}</td>
-                            <td>${tempEmp.email}</td>
-                            <td>${tempEmp.gender}</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary editBtn" data-id="${tempEmp.id}">Edit</button>
-                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${tempEmp.id}">Delete</button>
-                            </td>
-                        `;
-              listTbody.appendChild(tr);
-            }
-          })
-          .catch((error) => alert(error));
+          for (let tempEmp in employees) {
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${employees[tempEmp].id}</td>
+                <td>${employees[tempEmp].name}</td>
+                <td>${employees[tempEmp].email}</td>
+                <td>${employees[tempEmp].gender}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary editBtn" data-id="${employees[tempEmp].id}">Edit</button>
+                  <button class="btn btn-sm btn-danger deleteBtn" data-id="${employees[tempEmp].id}">Delete</button>
+                </td>
+            `;
+            listTbody.appendChild(tr);
+          }
+        } catch (error) {
+          alert(error.message);
+        }
       }
 
       async function addEmployee(empData) {
@@ -121,8 +123,6 @@
             },
 
             body: JSON.stringify(empData),
-          
-
           });
           if (!response.ok) {
             throw new Error("Failed to add employee");
@@ -137,23 +137,23 @@
       }
 
       async function updateEmployee(empId, empData) {
-        try{
-            const response = await fetch(`${baseURl}/${empId}`, {
-                method: "PUT",
-                headers: {
-                "Content-Type": "application/json",
-                },
-                body: JSON.stringify(empData),
-            });
-            if (!response.ok) {
-                throw new Error("Failed to update employee");
-            }
-    
-            alert("Employee updated successfully");
-            listTbody.innerHTML = "";
-            fetchEmployees();
-            } catch (error) {
-            alert(error.message);
+        try {
+          const response = await fetch(`${baseURl}/${empId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(empData),
+          });
+          if (!response.ok) {
+            throw new Error("Failed to update employee");
+          }
+
+          alert("Employee updated successfully");
+          listTbody.innerHTML = "";
+          fetchEmployees();
+        } catch (error) {
+          alert(error.message);
         }
       }
 
@@ -187,53 +187,56 @@
         empForm.reset();
       });
 
-        clearBtn.addEventListener("click", () => {
-            empForm.reset();
-            tempEditIt = null;
-        });
+      clearBtn.addEventListener("click", () => {
+        empForm.reset();
+        tempEditIt = null;
+      });
 
-        listTbody.addEventListener("click", async (ev) => {
-            if (ev.target.classList.contains("editBtn")) {
-                const empId = ev.target.getAttribute("data-id");
-                try {
-                    const response = await fetch(`${baseURl}/${empId}`);
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch employee data");
-                    }
-                    const empData = await response.json();
-                    idInput.value = empData.id;
-                    nameInput.value = empData.name;
-                    emailInput.value = empData.email;
-                    for (let tempGender in genderInputs) {
-                        if (genderInputs[tempGender].value === empData.gender) {
-                            genderInputs[tempGender].checked = true;
-                        } else {
-                            genderInputs[tempGender].checked = false;
-                        }
-                    }
-                    tempEditIt = empId;
-                } catch (error) {
-                    alert(error.message);
-                }
-            } else if (ev.target.classList.contains("deleteBtn")) {
-                const empId = ev.target.getAttribute("data-id");
-                if (confirm("Are you sure you want to delete employee " + empId + "?")) {
-                    try {
-                        const response = await fetch(`${baseURl}/${empId}`, {
-                            method: "DELETE",
-                        });
-                        if (!response.ok) {
-                            throw new Error("Failed to delete employee");
-                        }
-                        alert("Employee deleted successfully");
-                        listTbody.innerHTML = "";
-                        fetchEmployees();
-                    } catch (error) {
-                        alert(error.message);
-                    }
-                }
+      listTbody.addEventListener("click", async (ev) => {
+        if (ev.target.classList.contains("editBtn")) {
+          const empId = ev.target.getAttribute("data-id");
+          try {
+            const response = await fetch(`${baseURl}/${empId}`);
+            if (!response.ok) {
+              throw new Error("Failed to fetch employee data");
             }
-        });
+            const empData = await response.json();
+            idInput.value = empData.id;
+            nameInput.value = empData.name;
+            emailInput.value = empData.email;
+            for (let tempGender in genderInputs) {
+              if (genderInputs[tempGender].value === empData.gender) {
+                genderInputs[tempGender].checked = true;
+              } else {
+                genderInputs[tempGender].checked = false;
+              }
+            }
+            tempEditIt = empId;
+          } catch (error) {
+            alert(error.message);
+          }
+        } 
+        else if (ev.target.classList.contains("deleteBtn")) {
+          const empId = ev.target.getAttribute("data-id");
+          if (
+            confirm("Are you sure you want to delete employee " + empId + "?")
+          ) {
+            try {
+              const response = await fetch(`${baseURl}/${empId}`, {
+                method: "DELETE",
+              });
+              if (!response.ok) {
+                throw new Error("Failed to delete employee");
+              }
+              alert("Employee deleted successfully");
+              listTbody.innerHTML = "";
+              fetchEmployees();
+            } catch (error) {
+              alert(error.message);
+            }
+          }
+        }
+      });
 
       //fetch the initial employee list
       fetchEmployees();

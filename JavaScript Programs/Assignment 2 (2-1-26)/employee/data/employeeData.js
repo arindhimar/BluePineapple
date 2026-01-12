@@ -19,21 +19,25 @@ function ensureFile() {
 function readAllSync() {
   ensureFile();
 
-  const data = fs.readFileSync(CSV_PATH, 'utf8');
-  if (!data.trim()) return [];
-
-  return data
-    .trim()
-    .split('\n')
-    .map(line => {
-      const [id, name, email, gender] = line.split(',');
-      return {
-        id: String(id),
-        name: name || '',
-        email: email || '',
-        gender: gender || ''
-      };
+  const data =  new Promise((resolve, reject) => {
+    fs.readFile(CSV_PATH, 'utf8', (err, content) => {
+      if (err) {
+        return reject(err);
+      }
+      const employees = content.trim().split('\n').filter(line => line).map(line => {
+        const parts = line.split(',');
+        return {
+          id: parts[0],
+          name: parts[1],
+          email: parts[2],
+          gender: parts[3]
+        };
+      });
+      resolve(employees);
     });
+  });
+
+  return data;
 }
 
 function writeAllSync(employees) {

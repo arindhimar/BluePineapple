@@ -20,12 +20,12 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
 
-  if (req.method === "GET" && req.url === "/") {
+  if (req.method == "GET" && req.url=="/") {
     res.writeHead(200, { "Content-Type": "text/html" });
     return res.end(fs.readFileSync("index.html"));
   }
 
-  if (req.method === "GET" && req.url === "/time") {
+  if (req.method =="GET" && req.url == "/time") {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(
       JSON.stringify({
@@ -34,7 +34,7 @@ const server = http.createServer((req, res) => {
     );
   }
 
-  if (req.method === "POST" && req.url === "/upload") {
+  if (req.method == "POST" && req.url == "/upload") {
     const form = formidable.formidable({
       uploadDir: uploads,
       keepExtensions: true
