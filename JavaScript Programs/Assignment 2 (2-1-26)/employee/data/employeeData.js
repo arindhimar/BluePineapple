@@ -1,102 +1,98 @@
-const { json } = require('body-parser');
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const CSV_PATH = path.join(__dirname, '../api/employees.csv');
+const CSV_PATH = path.join(__dirname, "../api/employees.csv");
 
+/* ---------- Helpers ---------- */
 function ensureFile() {
   const dir = path.dirname(CSV_PATH);
-
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-
-  if (!fs.existsSync(CSV_PATH)) {
-    fs.writeFileSync(CSV_PATH, '', 'utf8');
-  }
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  if (!fs.existsSync(CSV_PATH)) fs.writeFileSync(CSV_PATH, "", "utf8");
 }
 
-function readAllSync() {
+async function readAll() {
   ensureFile();
+  const content = await fs.promises.readFile(CSV_PATH, "utf8");
+  if (!content.trim()) return [];
 
-  const data =  new Promise((resolve, reject) => {
-    fs.readFile(CSV_PATH, 'utf8', (err, content) => {
-      if (err) {
-        return reject(err);
-      }
-      const employees = content.trim().split('\n').filter(line => line).map(line => {
-        const parts = line.split(',');
-        return {
-          id: parts[0],
-          name: parts[1],
-          email: parts[2],
-          gender: parts[3]
-        };
-      });
-      resolve(employees);
+  return content
+    .trim()
+    .split("\n")
+    .map((line) => {
+      const [id, name, email, gender] = line.split(",");
+      return { id, name, email, gender };
     });
-  });
-
-  return data;
 }
 
-function writeAllSync(employees) {
-  ensureFile();
-
+function writeAll(employees) {
   const data = employees
-    .map(e => `${e.id},${e.name},${e.email},${e.gender}`)
-    .join('\n');
-
-  fs.writeFileSync(CSV_PATH, data + '\n', 'utf8');
+    .map((e) => `${e.id},${e.name},${e.email},${e.gender}`)
+    .join("\n");
+  fs.writeFileSync(CSV_PATH, data + "\n", "utf8");
 }
 
-function getAll() {
-  return readAllSync();
+/* ---------- CRUD ---------- */
+async function getAll() {
+  return await readAll();
 }
 
-function getById(id) {
-  return readAllSync().find(e => e.id === String(id)) || null;
+async function getById(id) {
+  const all = await readAll();
+  return all.find((e) => e.id === String(id)) || null;
 }
 
-function add(data) {
-  const all = readAllSync();
-  // console.log("data received in add function:", JSON.stringify(data));
-  //data is in json format
-  // let tempNewData = JSON.parse(data);
-  console.log("data in add function:", data);
-  
+async function add(data) {
+  const all = await readAll();
   const emp = {
-    id: data.id || String(Date.now())  ,
-    name: data.name || '',
-    email: data.email || '',
-    gender: data.gender || ''
+    id: data.id || String(Date.now()),
+    name: data.name || "",
+    email: data.email || "",
+    gender: data.gender || "",
   };
-
   all.push(emp);
-  writeAllSync(all);
+  writeAll(all);
   return emp;
 }
 
-function update(id, data) {
-  const all = readAllSync();
-  const index = all.findIndex(e => e.id === String(id));
-
+async function update(id, data) {
+  const all = await readAll();
+  const index = all.findIndex((e) => e.id === String(id));
   if (index === -1) return null;
 
   all[index] = { ...all[index], ...data, id: String(id) };
-  writeAllSync(all);
+  writeAll(all);
   return all[index];
 }
 
-function remove(id) {
-  const all = readAllSync();
-  const index = all.findIndex(e => e.id === String(id));
+async function remove(id) {
+  const all = await readAll();
+  const filtered = all.filter((e) => e.id !== String(id));
+  if (filtered.length === all.length) return null;
+  writeAll(filtered);
+  return true;
+}
 
-  if (index === -1) return null;
+async function removeMany(ids) {
+  const all = await readAll();
+  const idSet = new Set(ids.map(String));
 
-  const removed = all.splice(index, 1)[0];
-  writeAllSync(all);
+  const remaining = [];
+  const removed = [];
+
+  for (const emp of all) {
+    if (idSet.has(emp.id)) removed.push(emp);
+    else remaining.push(emp);
+  }
+
+  writeAll(remaining);
   return removed;
 }
 
-module.exports = { getAll, getById, add, update, remove };
+module.exports = {
+  getAll,
+  getById,
+  add,
+  update,
+  remove,
+  removeMany,
+};

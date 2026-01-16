@@ -1,38 +1,40 @@
 const data = require("../data/employeeData");
 
 async function getAllEmployees(req, res) {
-  const all = data.getAll();
-  res.json(all);
+  res.json(await data.getAll());
 }
 
 async function getEmployee(req, res) {
-  const { id } = req.params;
-  const emp = data.getById(id);
+  const emp = await data.getById(req.params.id);
   if (!emp) return res.status(404).json({ error: "Employee not found" });
   res.json(emp);
 }
 
 async function createEmployee(req, res) {
-  const result = data.add(req.body);
-  if (result && result.error)
-    return res.status(400).json({ errors: result.error });
-  res.status(201).json(result);
+  const emp = await data.add(req.body);
+  res.status(201).json(emp);
 }
 
 async function updateEmployee(req, res) {
-  const { id } = req.params;
-  const result = data.update(id, req.body);
-  if (result && result.error)
-    return res.status(404).json({ errors: result.error });
-  res.json(result);
+  const emp = await data.update(req.params.id, req.body);
+  if (!emp) return res.status(404).json({ error: "Employee not found" });
+  res.json(emp);
 }
 
 async function deleteEmployee(req, res) {
-  const { id } = req.params;
-  const result = data.remove(id);
-  if (result && result.error)
-    return res.status(404).json({ errors: result.error });
-  res.json({ message: "Deleted", employee: result });
+  const ok = await data.remove(req.params.id);
+  if (!ok) return res.status(404).json({ error: "Employee not found" });
+  res.json({ message: "Deleted" });
+}
+
+async function bulkDeleteEmployees(req, res) {
+  const { ids } = req.body;
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ error: "IDs array required" });
+  }
+
+  const removed = await data.removeMany(ids);
+  res.json({ message: "Deleted", count: removed.length });
 }
 
 module.exports = {
@@ -41,4 +43,5 @@ module.exports = {
   createEmployee,
   updateEmployee,
   deleteEmployee,
+  bulkDeleteEmployees
 };
