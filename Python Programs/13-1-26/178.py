@@ -1,5 +1,3 @@
-#Write a function to search some literals strings in a string.
-
 def search_literals(string, literals):
     for literal in literals:
         if literal in string:

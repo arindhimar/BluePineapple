@@ -20,6 +20,6 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 lat1 = int(input("Enter latitude 1"))
 lat2 = int(input("Enter latitude 2"))
 lon1 = int(input("Enter longtitude 1"))
-lon2 = int(input("Enter longtitude 20"))
+lon2 = int(input("Enter longtitude 2"))
 
 print(calculate_distance(lat1,lon1,lat2,lon2))

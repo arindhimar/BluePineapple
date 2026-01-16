@@ -1,5 +1,3 @@
-#Write a function to remove everything except alphanumeric characters from a string.
-
 def remove_special_characters(string):
     return ''.join(e for e in string if e.isalnum())
 
