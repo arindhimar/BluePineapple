@@ -1,0 +1,16 @@
+// package main1
+
+// import (
+// 	"fmt"
+// 	"net/http"
+// )
+
+// func main() {
+// 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+// 		fmt.Println(w)
+// 		fmt.Println("===============" + r.URL.Path)
+
+// 	})
+
+// 	http.ListenAndServe(":80", nil)
+// }

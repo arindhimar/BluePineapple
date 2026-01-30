@@ -1,6 +1,3 @@
-
-
-
 class Calculator {
   constructor(initialNum = 0) {
     this.value = initialNum;
